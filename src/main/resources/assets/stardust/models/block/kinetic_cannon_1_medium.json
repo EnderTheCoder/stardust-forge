@@ -1,0 +1,5 @@
+{
+  "loader": "forge:obj",
+  "flip-v": false,
+  "model": "stardust:models/block/kinetic_cannon_1_medium.obj"
+}

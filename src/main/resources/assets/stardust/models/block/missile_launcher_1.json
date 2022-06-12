@@ -1,0 +1,5 @@
+{
+  "loader": "forge:obj",
+  "flip-v": true,
+  "model": "stardust:models/block/missile_launcher_1.obj"
+}

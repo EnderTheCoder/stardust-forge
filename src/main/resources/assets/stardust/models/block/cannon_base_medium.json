@@ -1,0 +1,5 @@
+{
+  "loader": "forge:obj",
+  "flip-v": true,
+  "model": "stardust:models/block/cannon_base_medium.obj"
+}

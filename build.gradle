@@ -122,6 +122,7 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 }
 
 dependencies {
@@ -141,6 +142,7 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.77')
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

@@ -1,0 +1,4 @@
+# Made in Blockbench 4.2.5
+newmtl m_2
+map_Kd stardust:block/cannon_base_medium
+newmtl none

@@ -15,8 +15,10 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import stardust.stardust.event.RenderEventHandler;
 import stardust.stardust.registry.BlockRegistry;
 import stardust.stardust.registry.ItemRegistry;
+import stardust.stardust.registry.TileEntityTypeRegistry;
 
 import java.awt.*;
 import java.util.stream.Collectors;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 public class Stardust {
 
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public static String MODID = "stardust";
 
@@ -45,6 +47,10 @@ public class Stardust {
 
         BlockRegistry.register();
         ItemRegistry.register();
+        TileEntityTypeRegistry.registry();
+
+
+        FMLJavaModLoadingContext.get().getModEventBus().register(new RenderEventHandler());
     }
 
     private void setup(final FMLCommonSetupEvent event) {
