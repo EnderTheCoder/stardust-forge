@@ -5,6 +5,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import stardust.stardust.entity.CannonBaseMediumTileEntity;
 import stardust.stardust.entity.KineticCannon1MediumTileEntity;
 
 import static stardust.stardust.Stardust.MODID;
@@ -18,6 +19,11 @@ public class TileEntityTypeRegistry {
                     BlockRegistry.KINETIC_CANNON_1_MEDIUM.get()).build(null)
     );
 
+    public static RegistryObject<TileEntityType<CannonBaseMediumTileEntity>> CANNON_BASE_MEDIUM_TILE_ENTITY = TILE_ENTITY_TYPE_DEFERRED_REGISTER.register(
+            "cannon_base_medium_tile_entity",
+            () -> TileEntityType.Builder.create(CannonBaseMediumTileEntity::new,
+                    BlockRegistry.CANNON_BASE_MEDIUM.get()).build(null)
+    );
 
     public static void registry() {
         TILE_ENTITY_TYPE_DEFERRED_REGISTER.register(FMLJavaModLoadingContext.get().getModEventBus());

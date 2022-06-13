@@ -1,4 +1,4 @@
-package stardust.stardust.client.render.gecko.model;
+package stardust.stardust.client.render.gecko.model.entity;
 
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.GeckoLib;
