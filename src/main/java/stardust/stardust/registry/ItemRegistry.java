@@ -16,9 +16,6 @@ public class ItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 
     public static final RegistryObject<Item> CANNON_BASE_MEDIUM = ITEMS.register("cannon_base_medium", CannonBaseMedium::new);
-    public static final RegistryObject<Item> KINETIC_CANNON_1_MEDIUM = ITEMS.register("kinetic_cannon_1_medium", () -> new BlockItem(BlockRegistry.KINETIC_CANNON_1_MEDIUM.get(), new Item.Properties().group(ModGroup.WEAPON_GROUP)));
-    public static final RegistryObject<Item> KINETIC_CANNON_2_MEDIUM = ITEMS.register("kinetic_cannon_2_medium", () -> new BlockItem(BlockRegistry.KINETIC_CANNON_2_MEDIUM.get(), new Item.Properties().group(ModGroup.WEAPON_GROUP)));
-    public static final RegistryObject<Item> MISSILE_LAUNCHER_1 = ITEMS.register("missile_launcher_1", () -> new BlockItem(BlockRegistry.MISSILE_LAUNCHER_1.get(), new Item.Properties().group(ModGroup.WEAPON_GROUP)));
 
     public static void register() {
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());

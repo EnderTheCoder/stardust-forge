@@ -46,7 +46,9 @@ public class Stardust {
         MinecraftForge.EVENT_BUS.register(this);
 
         BlockRegistry.register();
+
         ItemRegistry.register();
+
         TileEntityTypeRegistry.registry();
 
 

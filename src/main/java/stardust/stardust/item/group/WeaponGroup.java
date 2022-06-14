@@ -16,7 +16,7 @@ public class WeaponGroup extends ItemGroup {
 
     @Nonnull
     public ItemStack createIcon() {
-        return new ItemStack(ItemRegistry.KINETIC_CANNON_1_MEDIUM.get());
+        return null;
     }
 
 }

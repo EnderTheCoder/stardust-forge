@@ -1,5 +1,13 @@
 {
   "variants": {
-    "": { "model": "stardust:block/cannon_base_medium" }
+    "offset_x=0,offset_z=0": { "model": "minecraft:block/air" },
+    "offset_x=2,offset_z=2": { "model": "minecraft:block/air" },
+    "offset_x=0,offset_z=2": { "model": "minecraft:block/air" },
+    "offset_x=2,offset_z=0": { "model": "minecraft:block/air" },
+    "offset_x=1,offset_z=0": { "model": "minecraft:block/air" },
+    "offset_x=1,offset_z=2": { "model": "minecraft:block/air" },
+    "offset_x=0,offset_z=1": { "model": "minecraft:block/air" },
+    "offset_x=2,offset_z=1": { "model": "minecraft:block/air" },
+    "offset_x=1,offset_z=1": { "model": "stardust:block/cannon_base_medium"}
   }
 }

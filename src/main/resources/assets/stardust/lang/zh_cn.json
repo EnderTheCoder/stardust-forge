@@ -1,3 +1,4 @@
 {
+  "message.stardust.debug": "debug",
   "message.stardust.counter": "计数: %d"
 }

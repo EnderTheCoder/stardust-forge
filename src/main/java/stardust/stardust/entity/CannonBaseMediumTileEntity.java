@@ -14,10 +14,6 @@ import javax.print.DocFlavor;
 import java.util.Objects;
 
 public class CannonBaseMediumTileEntity extends TileEntity {
-
-    private int offsetX;
-    private int offsetZ;
-
     public CannonBaseMediumTileEntity() {
         super(TileEntityTypeRegistry.CANNON_BASE_MEDIUM_TILE_ENTITY.get());
     }
@@ -25,40 +21,36 @@ public class CannonBaseMediumTileEntity extends TileEntity {
     @ParametersAreNonnullByDefault
     @Override
     public void read(BlockState blockState, CompoundNBT compound) {
-        this.offsetX = compound.getInt("offsetX");
-        this.offsetZ = compound.getInt("offsetZ");
         super.read(blockState, compound);
     }
 
     @Override
     public @ParametersAreNonnullByDefault CompoundNBT write(CompoundNBT compound) {
-        compound.putInt("offsetX", offsetX);
-        compound.putInt("offsetZ", offsetZ);
         return super.write(compound);
     }
-
-    public BlockPos getCenterPos() {
-        return this.getPos().add(-this.offsetX, 0, -this.offsetZ);
-    }
-
-    public BlockState getCenterBlockState() {
-        World world = this.getWorld();
-        assert world != null;
-        return world.getBlockState(getCenterPos());
-    }
-
-    public TileEntity getCenterTileEntity() {
-        World world = this.getWorld();
-        assert world != null;
-        return world.getTileEntity(getCenterPos());
-    }
-
-    public int getOffsetX() {
-        return offsetX;
-    }
-
-    public int getOffsetZ() {
-        return offsetZ;
-    }
+//
+//    public BlockPos getCenterPos() {
+//        return this.getPos().add(-this.offsetX, 0, -this.offsetZ);
+//    }
+//
+//    public BlockState getCenterBlockState() {
+//        World world = this.getWorld();
+//        assert world != null;
+//        return world.getBlockState(getCenterPos());
+//    }
+//
+//    public TileEntity getCenterTileEntity() {
+//        World world = this.getWorld();
+//        assert world != null;
+//        return world.getTileEntity(getCenterPos());
+//    }
+//
+//    public int getOffsetX() {
+//        return offsetX;
+//    }
+//
+//    public int getOffsetZ() {
+//        return offsetZ;
+//    }
 
 }
