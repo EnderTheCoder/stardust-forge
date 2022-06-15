@@ -16,7 +16,7 @@ version = 'alpha-1.0'
 
 java {
     archivesBaseName = 'stardust'
-    toolchain.languageVersion = JavaLanguageVersion.of(8)
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
 minecraft {

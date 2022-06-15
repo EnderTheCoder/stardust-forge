@@ -1,12 +1,13 @@
 package stardust.stardust.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DirectionalBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -15,12 +16,14 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import stardust.stardust.entity.CannonBaseMediumTileEntity;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class CannonBaseMedium extends Block {
 
@@ -29,8 +32,38 @@ public class CannonBaseMedium extends Block {
     public static final IntegerProperty OFFSET_Z = IntegerProperty.create("offset_z", 0, 2);
 
     public CannonBaseMedium() {
-        super(Properties.create(Material.IRON).hardnessAndResistance(100.0F, 2000.0F));
+        super(Properties.create(Material.ROCK, MaterialColor.BLACK).setRequiresTool().hardnessAndResistance(100.0F, 2000.0F).noDrops());
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.UP).with(OFFSET_X, 1).with(OFFSET_Z, 1));
+    }
+
+    public static int getRealOffsetX(BlockState state) {
+        return state.get(CannonBaseMedium.OFFSET_X) - 1;
+    }
+
+    public static int getRealOffsetZ(BlockState state) {
+        return state.get(CannonBaseMedium.OFFSET_Z) - 1;
+    }
+
+    public static BlockPos getCenterBlockPos(BlockState blockState, BlockPos pos) {
+        return pos.add(getRealOffsetX(blockState),0,getRealOffsetZ(blockState));
+    }
+
+
+//    public static BlockState getCenterBlockState(BlockState blockState, BlockPos pos) {
+//        return blockState.
+//    }
+
+    public static List<BlockPos> getAllBlockPos(BlockState blockState, BlockPos pos) {
+        List<BlockPos> allPos = new java.util.ArrayList<>(List.of(getCenterBlockPos(blockState, pos)));
+        allPos.add(allPos.get(0).add(1,0,0));
+        allPos.add(allPos.get(0).add(1,0,1));
+        allPos.add(allPos.get(0).add(1,0,-1));
+        allPos.add(allPos.get(0).add(-1,0,0));
+        allPos.add(allPos.get(0).add(-1,0,1));
+        allPos.add(allPos.get(0).add(-1,0,-1));
+        allPos.add(allPos.get(0).add(0,0,1));
+        allPos.add(allPos.get(0).add(0,0,-1));
+        return allPos;
     }
 
 
@@ -58,4 +91,26 @@ public class CannonBaseMedium extends Block {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new CannonBaseMediumTileEntity();
     }
+
+    public BlockRenderType getRenderType(BlockState state) {
+        if (state.get(CannonBaseMedium.OFFSET_X) != 1 || state.getBlockState().get(CannonBaseMedium.OFFSET_Z) != 1)
+            return BlockRenderType.INVISIBLE;
+        else return BlockRenderType.MODEL;
+    }
+
+
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
+        return false;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return 0.2F;
+    }
+//    public static class XProperties extends Properties {
+//
+//    }
 }

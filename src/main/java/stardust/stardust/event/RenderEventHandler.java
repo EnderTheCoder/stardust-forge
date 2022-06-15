@@ -4,8 +4,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class RenderEventHandler {
-
-
     @SubscribeEvent
     public void registerRenderers(final FMLClientSetupEvent event)
     {
