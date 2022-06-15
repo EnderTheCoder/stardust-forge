@@ -66,7 +66,7 @@ public class CannonBaseMedium extends Block {
         return allPos;
     }
 
-
+    @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
         builder.add(OFFSET_X);
@@ -92,13 +92,22 @@ public class CannonBaseMedium extends Block {
         return new CannonBaseMediumTileEntity();
     }
 
+    @Override
     public BlockRenderType getRenderType(BlockState state) {
-        if (state.get(CannonBaseMedium.OFFSET_X) != 1 || state.getBlockState().get(CannonBaseMedium.OFFSET_Z) != 1)
-            return BlockRenderType.INVISIBLE;
-        else return BlockRenderType.MODEL;
+        return BlockRenderType.MODEL;
     }
 
+//    @Override
+//    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+//        return 15;
+//    }
 
+
+
+    @Override
+    public boolean isTransparent(BlockState state) {
+        return (state.get(CannonBaseMedium.OFFSET_X) != 1 || state.getBlockState().get(CannonBaseMedium.OFFSET_Z) != 1);
+    }
 
     @Override
     public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
@@ -108,7 +117,8 @@ public class CannonBaseMedium extends Block {
     @Override
     @OnlyIn(Dist.CLIENT)
     public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return 0.2F;
+        if (state.get(CannonBaseMedium.OFFSET_X) != 1 || state.getBlockState().get(CannonBaseMedium.OFFSET_Z) != 1) return 0.0F;
+        else return 1.0F;
     }
 //    public static class XProperties extends Properties {
 //

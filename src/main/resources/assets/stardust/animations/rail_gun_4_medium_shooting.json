@@ -1,0 +1,89 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"railgun4_shooting": {
+			"animation_length": 18.29167,
+			"bones": {
+				"right": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"10.125": {
+							"vector": [0, 0, 1.5]
+						},
+						"10.2917": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"left": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"10.125": {
+							"vector": [0, 0, -1.5]
+						},
+						"10.2917": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"barrel_front": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"10.125": {
+							"vector": [0, 0, 0]
+						},
+						"10.2917": {
+							"vector": [-3, 0, 0]
+						},
+						"12.5833": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"flash": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"10.125": {
+							"vector": [0, 0, 0]
+						},
+						"10.2917": {
+							"vector": [2, 3, -3],
+							"easing": "step"
+						},
+						"10.3333": {
+							"vector": [0, 0, 0],
+							"easing": "step"
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"10.125": {
+							"vector": [1, 1, 1]
+						},
+						"10.2917": {
+							"vector": [30, 30, 30]
+						},
+						"10.3333": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "railgun4_shooting.mp3"
+				}
+			}
+		}
+	}
+}
