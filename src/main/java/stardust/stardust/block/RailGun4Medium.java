@@ -23,10 +23,6 @@ public class RailGun4Medium extends AbstractCannonMedium {
         super(Properties.create(Material.ROCK).hardnessAndResistance(100.0F, 2000.0F));
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
 
     @Nullable
     @Override
@@ -42,4 +38,7 @@ public class RailGun4Medium extends AbstractCannonMedium {
         tileEntity.shoot();
         return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
     }
+
+
+
 }

@@ -13,6 +13,7 @@ import net.minecraft.world.IBlockReader;
 
 public abstract class AbstractCannon extends Block {
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
+
     public AbstractCannon(Properties properties) {
         super(properties);
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST));
@@ -42,4 +43,5 @@ public abstract class AbstractCannon extends Block {
     public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
         return false;
     }
+
 }
