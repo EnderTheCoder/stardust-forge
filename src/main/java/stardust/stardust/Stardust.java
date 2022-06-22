@@ -56,6 +56,7 @@ public class Stardust {
         EntityTypeRegistry.registry();
 
         FMLJavaModLoadingContext.get().getModEventBus().register(new RenderEventHandler());
+
         MinecraftForge.EVENT_BUS.register(new CannonBaseBreakEventHandler());
     }
 

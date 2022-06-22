@@ -22,6 +22,15 @@ public class EntityTypeRegistry {
             ).build("rail_gun_projectile_entity")
     );
 
+
+//    public static RegistryObject<EntityType<ProjectileDemoEntity>> PROJECTILE_DEMO_ENTITY = ENTITY_TYPE_DEFERRED_REGISTER.register(
+//            "projectile_demo_entity",
+//            () -> EntityType.Builder.create(
+//                    (EntityType<ProjectileDemoEntity> entityType, World world) -> new RailGunProjectileEntity(entityType, world),
+//                    EntityClassification.MISC
+//            ).build("projectile_demo_entity")
+//    );
+
     public static void registry() {
         ENTITY_TYPE_DEFERRED_REGISTER.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
