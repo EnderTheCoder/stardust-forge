@@ -15,7 +15,6 @@ public class BlockRegistry {
     public static final RegistryObject<Block> CANNON_BASE_MEDIUM = BLOCKS.register("cannon_base_medium", CannonBaseMedium::new);
     public static final RegistryObject<Block> STEEL_BLOCK = BLOCKS.register("steel_block", SteelBlock::new);
     public static final RegistryObject<Block> RAIL_GUN_4_MEDIUM = BLOCKS.register("rail_gun_4_medium", RailGun4Medium::new);
-    public static final RegistryObject<Block> RAIL_GUN_3_MEDIUM = BLOCKS.register("rail_gun_3_medium", RailGun3Medium::new);
 
     public static void register() {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());

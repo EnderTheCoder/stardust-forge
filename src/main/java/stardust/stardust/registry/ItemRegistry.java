@@ -18,7 +18,6 @@ public class ItemRegistry {
 
     public static final RegistryObject<Item> CANNON_BASE_MEDIUM = ITEMS.register("cannon_base_medium", CannonBaseMedium::new);
     public static final RegistryObject<Item> RAIL_GUN_4_MEDIUM = ITEMS.register("rail_gun_4_medium", () -> new BlockItem(BlockRegistry.RAIL_GUN_4_MEDIUM.get(), new Item.Properties().group(ModGroup.WEAPON_GROUP)));
-    public static final RegistryObject<Item> RAIL_GUN_3_MEDIUM = ITEMS.register("rail_gun_3_medium", () -> new BlockItem(BlockRegistry.RAIL_GUN_3_MEDIUM.get(), new Item.Properties().group(ModGroup.WEAPON_GROUP)));
 
 
     public static void register() {

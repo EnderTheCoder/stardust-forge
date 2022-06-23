@@ -39,21 +39,17 @@ public class RailGun4Medium extends AbstractCannonMedium {
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
+        RailGun4MediumTileEntity tileEntity = (RailGun4MediumTileEntity) worldIn.getTileEntity(pos);
+        assert tileEntity != null;
 
 
-        if (isCoolDown(worldIn)) {
 
-            this.setCurrentTime(worldIn.getGameTime());
+//        tileEntity.shoot();
 
-            LOGGER.warn("activated");
 
-            RailGun4MediumTileEntity tileEntity = (RailGun4MediumTileEntity) worldIn.getTileEntity(pos);
-            assert tileEntity != null;
-            tileEntity.shoot();
-        }
+
         return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
     }
-
 
 
 }

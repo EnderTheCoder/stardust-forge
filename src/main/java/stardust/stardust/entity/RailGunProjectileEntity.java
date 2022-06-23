@@ -3,19 +3,23 @@ package stardust.stardust.entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
+import net.minecraft.network.IPacket;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import stardust.stardust.damage.SubstanceDecomposing;
 import stardust.stardust.registry.EntityTypeRegistry;
 
-public class RailGunProjectileEntity extends DamagingProjectileEntity implements IAnimatable {
+public class RailGunProjectileEntity extends AbstractStardustProjectileEntity implements IAnimatable, net.minecraftforge.common.extensions.IForgeEntity{
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
@@ -24,62 +28,17 @@ public class RailGunProjectileEntity extends DamagingProjectileEntity implements
         this.ignoreFrustumCheck = true;
     }
 
-    public RailGunProjectileEntity(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ) {
-        super(EntityTypeRegistry.RAIL_GUN_PROJECTILE_ENTITY.get(), shooter, accelX, accelY, accelZ, worldIn);
-    }
-
-    public RailGunProjectileEntity(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
-        super(EntityTypeRegistry.RAIL_GUN_PROJECTILE_ENTITY.get(), x, y, z, accelX, accelY, accelZ, worldIn);
-    }
-
-    @Override
-    public boolean isBurning() {
-        return false;
-    }
-
-    @Override
-    protected void onImpact(RayTraceResult result) {
-        super.onImpact(result);
-        if (!this.world.isRemote) {
-            Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.getShooter()) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
-            this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), 10.0F, true, explosion$mode);
-            this.remove();
-        }
-    }
-
-    @Override
-    protected void func_230299_a_(BlockRayTraceResult result) {
-        super.func_230299_a_(result);
-        if (!this.world.isRemote) {
-            LOGGER.warn("HIT BLOCK");
-            this.remove();
-        }
-
-    }
-
-    @Override
-    protected void onEntityHit(EntityRayTraceResult result) {
-        super.onEntityHit(result);
-        if (!this.world.isRemote) {
-            LOGGER.warn("HIT ENTITY");
-            this.remove();
-        }
-
+    public RailGunProjectileEntity(World worldIn, ProjectileType projectileType, long energy, float attribute, TileEntity shootTile, double startX, double startY, double startZ, double accelerationX, double accelerationY, double accelerationZ) {
+        super(EntityTypeRegistry.RAIL_GUN_PROJECTILE_ENTITY.get(), worldIn, projectileType, energy, attribute, shootTile, startX, startY, startZ, accelerationX, accelerationY, accelerationZ);
     }
 
     @Override
     public void registerControllers(AnimationData data) {
-//        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+
     }
 
     @Override
     public AnimationFactory getFactory() {
-        return this.factory;
+        return factory;
     }
-
-//    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-//        event.getController().setAnimation(new AnimationBuilder().addAnimation("", true));
-//        return PlayState.CONTINUE;
-//    }
-
 }

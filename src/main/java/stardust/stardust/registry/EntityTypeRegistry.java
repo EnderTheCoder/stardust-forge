@@ -7,6 +7,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import stardust.stardust.entity.CarrierDemoEntity;
 import stardust.stardust.entity.RailGunProjectileEntity;
 
 import static stardust.stardust.Stardust.MODID;
@@ -20,6 +21,14 @@ public class EntityTypeRegistry {
                     (EntityType<RailGunProjectileEntity> entityType, World world) -> new RailGunProjectileEntity(entityType, world),
                     EntityClassification.MISC
             ).build("rail_gun_projectile_entity")
+    );
+
+    public static RegistryObject<EntityType<CarrierDemoEntity>> CARRIER_DEMO_ENTITY = ENTITY_TYPE_DEFERRED_REGISTER.register(
+            "carrier_demo_entity",
+            () -> EntityType.Builder.create(
+                    (EntityType<CarrierDemoEntity> entityType, World world) -> new CarrierDemoEntity(entityType, world),
+                    EntityClassification.MISC
+            ).build("carrier_demo_entity")
     );
 
 

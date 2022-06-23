@@ -120,7 +120,13 @@ public class CannonBaseMedium extends Block {
         if (state.get(CannonBaseMedium.OFFSET_X) != 1 || state.getBlockState().get(CannonBaseMedium.OFFSET_Z) != 1) return 0.0F;
         else return 1.0F;
     }
-//    public static class XProperties extends Properties {
+
+    @Override
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+        return 10;
+    }
+
+    //    public static class XProperties extends Properties {
 //
 //    }
 }

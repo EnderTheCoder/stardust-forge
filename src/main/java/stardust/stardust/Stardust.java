@@ -16,7 +16,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import stardust.stardust.event.CannonBaseBreakEventHandler;
-import stardust.stardust.event.RenderEventHandler;
 import stardust.stardust.registry.BlockRegistry;
 import stardust.stardust.registry.EntityTypeRegistry;
 import stardust.stardust.registry.ItemRegistry;
@@ -54,8 +53,6 @@ public class Stardust {
         TileEntityTypeRegistry.registry();
 
         EntityTypeRegistry.registry();
-
-        FMLJavaModLoadingContext.get().getModEventBus().register(new RenderEventHandler());
 
         MinecraftForge.EVENT_BUS.register(new CannonBaseBreakEventHandler());
     }

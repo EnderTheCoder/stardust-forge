@@ -14,25 +14,10 @@ import net.minecraft.world.World;
 
 public abstract class AbstractCannon extends Block {
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
-    private int cd = 20;
-    private long lastShootTime = 0;
 
     public AbstractCannon(Properties properties) {
         super(properties);
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST));
-    }
-
-    public boolean isCoolDown(World world) {
-        long currentGameTime = world.getGameTime();
-        return cd + lastShootTime < currentGameTime;
-    }
-
-    public int getCd() {
-        return cd;
-    }
-
-    public void setCurrentTime(long time) {
-        this.lastShootTime = time;
     }
 
     @Override
