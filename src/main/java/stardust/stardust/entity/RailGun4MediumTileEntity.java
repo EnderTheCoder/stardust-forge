@@ -14,6 +14,7 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -29,11 +30,15 @@ import java.util.zip.DeflaterOutputStream;
 public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity {
     public static final Logger LOGGER = LogManager.getLogger();
     private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationController<RailGun4MediumTileEntity> controller = new AnimationController<>(this, "controller", 0, this::predicate);
+
 
     private int shootCount = 0;
     private final int rotationSpeed = 6;
-    private double nowRotationX = 0;
-    private double nowRotationY = 0;
+    public double nowRotationX = 0;
+    public double nowRotationY = 0;
+    public double targetRotationX = 0;
+    public double targetRotationY = 0;
     private final double heightOffset = 1.0d;
 
     public RailGun4MediumTileEntity() {
@@ -43,8 +48,12 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
     public void rotate(MatrixStack stack) {
 //        stack.rotate(Vector3f.XP.rotationDegrees((float) nowRotationX));
 //        stack.rotate(Vector3f.YP.rotationDegrees((float) nowRotationY));
-        stack.rotate(Vector3f.XP.rotationDegrees(45));
-        stack.rotate(Vector3f.YP.rotationDegrees(180));
+//        stack.rotate(Vector3f.XP.rotationDegrees(45));
+//        stack.rotate(Vector3f.YP.rotationDegrees(180));
+
+    }
+
+    private void getBarrelRootPos(Vector3d blockCenterPos, Vector3d offset) {
 
     }
 
@@ -84,7 +93,7 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+        data.addAnimationController(controller);
     }
 
 
@@ -126,7 +135,12 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
     public void tick() {
         World world = this.world;
         assert world != null;
-        if (world.getGameTime() % 20 == 0) shoot(new Vector3d(0, 0, 0));
+        if (world.getGameTime() % 20 == 0) {
+//            shoot(new Vector3d(0, 0, 0));
+            if (controller.getAnimationState() == AnimationState.Stopped) {
+                controller.setAnimation(new AnimationBuilder().addAnimation("railgun4_shooting", true));
+            }
+        }
     }
 
     @Override
