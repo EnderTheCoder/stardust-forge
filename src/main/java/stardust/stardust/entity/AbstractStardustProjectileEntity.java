@@ -13,6 +13,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
+import stardust.stardust.Stardust;
 import stardust.stardust.damage.SubstanceDecomposing;
 
 public abstract class AbstractStardustProjectileEntity extends DamagingProjectileEntity {
@@ -30,7 +31,7 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
     private long shieldDamage;
     private long energy;
     private float attribute;
-    private ProjectileType projectileType;
+    public ProjectileType projectileType;
 
 
     public AbstractStardustProjectileEntity(EntityType<? extends AbstractStardustProjectileEntity> entityTypeIn, World worldIn) {
@@ -48,13 +49,18 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
 
     @Override
     protected void onImpact(RayTraceResult result) {
-
-        super.onImpact(result);
+        RayTraceResult.Type type = result.getType();
+        if (type == RayTraceResult.Type.ENTITY) {
+            if (((EntityRayTraceResult) result).getEntity().equals(this)) return;
+            this.onEntityHit((EntityRayTraceResult) result);
+        } else if (type == RayTraceResult.Type.BLOCK) {
+            this.func_230299_a_((BlockRayTraceResult) result);
+        }
 
         if (!world.isRemote()) {
             if (projectileType == ProjectileType.KINETIC_HIGHLY_EXPLOSIVE) {
                 Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.getShooter()) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
-                this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), attribute, true, explosion$mode);
+                this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), attribute, false, explosion$mode);
             }
 
             if (projectileType != ProjectileType.KINETIC_ARMOR_PIERCING && projectileType != ProjectileType.ENERGY_SUBSTANCE_DECOMPOSER) {
@@ -68,6 +74,8 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
     protected void onEntityHit(EntityRayTraceResult result) {
         super.onEntityHit(result);
         if (!this.world.isRemote()) {
+            Stardust.LOGGER.info("Entity HIT");
+            Stardust.LOGGER.info(result.getEntity().getName());
             if (this.projectileType == ProjectileType.KINETIC_HIGHLY_EXPLOSIVE) this.remove();
         }
     }
@@ -80,6 +88,8 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
     protected void func_230299_a_(BlockRayTraceResult result) {
         super.func_230299_a_(result);
         if (!this.world.isRemote) {
+            Stardust.LOGGER.info("Block HIT");
+            Stardust.LOGGER.info(this.world.getBlockState(result.getPos()));
             if (this.projectileType == ProjectileType.ENERGY_SUBSTANCE_DECOMPOSER) {
                 new SubstanceDecomposing(this.world, result.getPos(), (long) this.attribute);
             }

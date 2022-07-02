@@ -2,6 +2,10 @@ package stardust.stardust.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.DispenserBlock;
+import net.minecraft.entity.EntityPredicate;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -22,6 +26,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import stardust.stardust.Stardust;
 import stardust.stardust.registry.TileEntityTypeRegistry;
 
 import java.net.PortUnreachableException;
@@ -32,14 +37,24 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
     private final AnimationFactory factory = new AnimationFactory(this);
     private final AnimationController<RailGun4MediumTileEntity> controller = new AnimationController<>(this, "controller", 0, this::predicate);
 
+    public enum RotationState {
+        ROTATING, COMPLETED, FREE
+    }
 
+    private RotationState rotationState = RotationState.FREE;
+    private double initialRotationYPrefix = 180;
+    private double initialRotationXPrefix = 0;
+    private int cd = 60;
+    private long lastShootTick = 0;
     private int shootCount = 0;
-    private final int rotationSpeed = 6;
+    private final int rotationSpeed = 3;
     public double nowRotationX = 0;
     public double nowRotationY = 0;
+    public Vector3d targetPos;
     public double targetRotationX = 0;
     public double targetRotationY = 0;
     private final double heightOffset = 1.0d;
+    private final Vector3d barrelRootOffset = new Vector3d(0.0d, -0.3d, 4.0d);
 
     public RailGun4MediumTileEntity() {
         super(TileEntityTypeRegistry.RAIL_GUN_4_MEDIUM_TILE_ENTITY.get());
@@ -53,38 +68,43 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
 
     }
 
-    private void getBarrelRootPos(Vector3d blockCenterPos, Vector3d offset) {
-
+    public double getActualRotationY() {
+        return nowRotationY + initialRotationYPrefix;
     }
 
-    public void rotateTo(Vector3d targetPos, Vector3d initialDirection) {
+    public double getActualRotationX() {
+        return nowRotationX + initialRotationXPrefix;
+    }
+
+
+    private Vector3d getBarrelRootPos(Vector3d blockCenterPos) {
+        return blockCenterPos.add(this.barrelRootOffset.rotateYaw((float) Math.toRadians(this.getActualRotationY())));
+    }
+
+    public void rotateTo(Vector3d targetPos) {
+
         Vector3d turretCenter = getBlockCenter(this.getPos());
 
-        double a = turretCenter.getX();//a
-        double b = turretCenter.getY();//b
-        double c = turretCenter.getZ();//c
+        double a = turretCenter.getX();
+        double b = turretCenter.getY();
+        double c = turretCenter.getZ();
 
         double d = targetPos.getX();
         double e = targetPos.getY();
         double f = targetPos.getZ();
+        this.rotationState = RotationState.ROTATING;
+        this.targetRotationY = - getAngularDifferenceY(getBarrelInitialTowardTo(), new Vector3d(d - a, 0, f - c));
 
-        double i = initialDirection.getX();
-        double j = initialDirection.getY();
-        double k = initialDirection.getZ();
-        //need to be changed with facing someday
-
-        //WDday's algorithm
-        //x:arctan[(d-a)/(f-c)]-arctan(i/k)
-        //y:arctan[(d-a)/(e-b)]-arctan(i/j)
-
-        double atanResult1 = Math.toDegrees(Math.atan((d - a) / (f - c)));
-        if (k != 0) this.nowRotationX = atanResult1 - Math.toDegrees(Math.atan(i / k));
-        else this.nowRotationX = atanResult1 - 0;
-
-        double atanResult2 = Math.toDegrees(Math.atan((d - a) / (e - b)));
-        if (j != 0) this.nowRotationY = atanResult2 - Math.toDegrees(Math.atan(i / j));
-        else this.nowRotationY = atanResult2 - 0;
     }
+
+    public Vector3d getBarrelInitialTowardTo() {
+        return new Vector3d(0, 0, 1.0d).rotateYaw((float) Math.toRadians(initialRotationYPrefix));
+    }
+
+    public double getAngularDifferenceY(Vector3d vec1, Vector3d vec2) {
+        return Math.toDegrees(Math.acos((vec1.x * vec2.x + vec1.z * vec2.z) / (Math.sqrt(vec1.x * vec1.x + vec1.z * vec1.z) * Math.sqrt(vec2.x * vec2.x + vec2.z * vec2.z))));
+    }
+
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         event.getController().setAnimation(new AnimationBuilder().addAnimation("railgun4_shooting", true));
@@ -100,20 +120,17 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
     public void shoot(Vector3d targetPos) {
         World world = this.getWorld();
         assert world != null;
-
-        rotateTo(targetPos, new Vector3d(0,0,1));
-
+        if (this.lastShootTick + this.cd > getWorld().getGameTime()) return;
+        this.lastShootTick = getWorld().getGameTime();
         if (!world.isRemote()) {
 
-
-            Direction direction = this.getBlockState().get(DispenserBlock.FACING);
             LOGGER.info(String.format("the %s times of shooting", ++shootCount));
 
             Vector3d blockCenter = this.getBlockCenter(this.getPos());
-
-            double x0 = blockCenter.getX();
-            double y0 = blockCenter.getY();
-            double z0 = blockCenter.getZ();
+            Vector3d barrelRootPos = getBarrelRootPos(blockCenter);
+            double x0 = barrelRootPos.getX();
+            double y0 = barrelRootPos.getY();
+            double z0 = barrelRootPos.getZ();
 
             y0 += heightOffset;
 
@@ -125,23 +142,47 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
             projectile.setRawPosition(x0, y0, z0);
             world.addEntity(projectile);
         }
+        this.rotationState = RotationState.FREE;
     }
 
     private Vector3d getBlockCenter(BlockPos pos) {
-        return new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        return new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+    }
+
+    private void rotateTick() {
+        if (this.targetRotationY > this.nowRotationY) {
+            if (Math.abs(this.targetRotationY - this.nowRotationY) < this.rotationSpeed) this.nowRotationY = this.targetRotationY;
+            else this.nowRotationY += this.rotationSpeed;
+        } else if (this.targetRotationY < this.nowRotationY) {
+            if (Math.abs(this.targetRotationY - this.nowRotationY) < this.rotationSpeed) this.nowRotationY = this.targetRotationY;
+            else this.nowRotationY -= this.rotationSpeed;
+        } else if (this.targetRotationY == this.nowRotationY){
+            this.rotationState = RotationState.COMPLETED;
+        }
+//        this.nowRotationY = this.targetRotationY;
+//        this.rotationState = RotationState.COMPLETED;
     }
 
     @Override
     public void tick() {
-        World world = this.world;
-        assert world != null;
-        if (world.getGameTime() % 20 == 0) {
-//            shoot(new Vector3d(0, 0, 0));
-            if (controller.getAnimationState() == AnimationState.Stopped) {
-                controller.setAnimation(new AnimationBuilder().addAnimation("railgun4_shooting", true));
+        if (this.rotationState == RotationState.FREE) {
+            World world = this.world;
+            assert world != null;
+            LivingEntity entity = world.getClosestEntity(VillagerEntity.class, EntityPredicate.DEFAULT, null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getRenderBoundingBox().grow(64d, 20d, 64d));
+            if (entity != null) {
+                this.targetPos = entity.getPositionVec();
+                rotateTo(this.targetPos);
             }
+        } else if (this.rotationState == RotationState.COMPLETED) {
+            shoot(this.targetPos);
+        } else if (this.rotationState == RotationState.ROTATING) {
+            rotateTick();
         }
+//        if (controller.getAnimationState() == AnimationState.Stopped) {
+//            controller.setAnimation(new AnimationBuilder().addAnimation("railgun4_shooting", true));
+//        }
     }
+
 
     @Override
     public AnimationFactory getFactory() {

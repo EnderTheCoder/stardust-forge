@@ -26,6 +26,7 @@ public class RailGunProjectileEntity extends AbstractStardustProjectileEntity im
     public RailGunProjectileEntity(EntityType<? extends RailGunProjectileEntity> p_i50147_1_, World p_i50147_2_) {
         super(p_i50147_1_, p_i50147_2_);
         this.ignoreFrustumCheck = true;
+        this.projectileType = ProjectileType.KINETIC_HIGHLY_EXPLOSIVE;
     }
 
     public RailGunProjectileEntity(World worldIn, ProjectileType projectileType, long energy, float attribute, TileEntity shootTile, double startX, double startY, double startZ, double accelerationX, double accelerationY, double accelerationZ) {

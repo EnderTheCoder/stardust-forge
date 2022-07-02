@@ -9,6 +9,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -42,6 +43,7 @@ public class RailGun4Medium extends AbstractCannonMedium {
 
         RailGun4MediumTileEntity tileEntity = (RailGun4MediumTileEntity) worldIn.getTileEntity(pos);
         assert tileEntity != null;
+        tileEntity.shoot(new Vector3d(0,10,0));
         return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
     }
 

@@ -9,21 +9,18 @@ import static stardust.stardust.Stardust.MODID;
 public class RailGun4MediumModel extends AnimatedGeoModel<RailGun4MediumTileEntity> {
 
     @Override
-    public ResourceLocation getModelLocation(RailGun4MediumTileEntity object)
-    {
+    public ResourceLocation getModelLocation(RailGun4MediumTileEntity object) {
 
         return new ResourceLocation(MODID, "geo/rail_gun_4_medium.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(RailGun4MediumTileEntity object)
-    {
+    public ResourceLocation getTextureLocation(RailGun4MediumTileEntity object) {
         return new ResourceLocation(MODID, "textures/block/rail_gun_4_medium.png");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(RailGun4MediumTileEntity object)
-    {
+    public ResourceLocation getAnimationFileLocation(RailGun4MediumTileEntity object) {
         return new ResourceLocation(MODID, "animations/rail_gun_4_medium_shooting.json");
     }
 
@@ -31,6 +28,7 @@ public class RailGun4MediumModel extends AnimatedGeoModel<RailGun4MediumTileEnti
     public void setLivingAnimations(RailGun4MediumTileEntity entity, Integer uniqueID) {
         super.setLivingAnimations(entity, uniqueID);
 //        this.getAnimationProcessor().getBone("barrel_moving_up_down").setRotationZ((float) Math.toRadians(entity.nowRotationX));
-//        this.getAnimationProcessor().getBone("turret").setRotationY((float) Math.toRadians(entity.nowRotationY));
+        this.getAnimationProcessor().getBone("turret").setRotationY((float) Math.toRadians(entity.getActualRotationY()));
+        this.getAnimationProcessor().getBone("barrel_moving_up_down").setRotationX((float) Math.toRadians(entity.getActualRotationX()));
     }
 }
