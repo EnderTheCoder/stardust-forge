@@ -43,7 +43,8 @@ public class RailGun4Medium extends AbstractCannonMedium {
 
         RailGun4MediumTileEntity tileEntity = (RailGun4MediumTileEntity) worldIn.getTileEntity(pos);
         assert tileEntity != null;
-        tileEntity.shoot(new Vector3d(0,10,0));
+
+        RailGun4MediumTileEntity.TURRETS_ON_PLAYER_CONTROLLED.put(player, tileEntity);
         return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
     }
 

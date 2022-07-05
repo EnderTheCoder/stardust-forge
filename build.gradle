@@ -20,6 +20,7 @@ java {
 }
 
 minecraft {
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     // The mappings can be changed at any time and must be in the following format.
     // Channel:   Version:
     // snapshot   YYYYMMDD   Snapshot are built nightly.

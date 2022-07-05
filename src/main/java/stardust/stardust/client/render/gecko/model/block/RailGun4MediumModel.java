@@ -28,7 +28,7 @@ public class RailGun4MediumModel extends AnimatedGeoModel<RailGun4MediumTileEnti
     public void setLivingAnimations(RailGun4MediumTileEntity entity, Integer uniqueID) {
         super.setLivingAnimations(entity, uniqueID);
 //        this.getAnimationProcessor().getBone("barrel_moving_up_down").setRotationZ((float) Math.toRadians(entity.nowRotationX));
-        this.getAnimationProcessor().getBone("turret").setRotationY((float) Math.toRadians(entity.getActualRotationY()));
-        this.getAnimationProcessor().getBone("barrel_moving_up_down").setRotationX((float) Math.toRadians(entity.getActualRotationX()));
+        this.getAnimationProcessor().getBone("turret").setRotationY((float) entity.getActualRotationY());
+        this.getAnimationProcessor().getBone("barrel_moving_up_down").setRotationX((float) entity.getActualRotationX());
     }
 }
