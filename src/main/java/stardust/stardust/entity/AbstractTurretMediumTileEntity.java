@@ -1,14 +1,12 @@
 package stardust.stardust.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
@@ -24,13 +22,13 @@ import stardust.stardust.registry.TileEntityTypeRegistry;
 
 import java.util.HashMap;
 
-public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity {
+public class AbstractTurretMediumTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity {
     public static final Logger LOGGER = LogManager.getLogger();
     private final AnimationFactory factory = new AnimationFactory(this);
-    private final AnimationController<RailGun4MediumTileEntity> controller = new AnimationController<>(this, "controller", 0, this::predicate);
+    private final AnimationController<AbstractTurretMediumTileEntity> controller = new AnimationController<>(this, "controller", 0, this::predicate);
 
     public enum RotationState {
-        ROTATING, READY, FREE
+        ROTATING, READY, FREE, RESETTING
     }
 
     private RotationState rotationState = RotationState.FREE;
@@ -42,13 +40,13 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
     private final int rotationSpeed = 3;
     public double nowRotationX = 0;
     public double nowRotationY = 0;
-    public Vector3d targetPos;
-    public double targetRotationX = 0;
-    public double targetRotationY = 0;
+    //    public Vector3d targetPos;
+    public double goalRotationX = 0;
+    public double goalRotationY = 0;
     private final Vector3d barrelRootOffset = new Vector3d(0.0d, 0.2d, 4.0d);
-    public static HashMap<PlayerEntity, RailGun4MediumTileEntity> TURRETS_ON_PLAYER_CONTROLLED= new HashMap<>();
+    public static HashMap<PlayerEntity, AbstractTurretMediumTileEntity> TURRETS_ON_PLAYER_CONTROLLED = new HashMap<>();
 
-    public RailGun4MediumTileEntity() {
+    public AbstractTurretMediumTileEntity() {
         super(TileEntityTypeRegistry.RAIL_GUN_4_MEDIUM_TILE_ENTITY.get());
     }
 
@@ -76,8 +74,11 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
         return getBlockCenter().add(this.barrelRootOffset.rotateYaw((float) this.getActualRotationY()));
     }
 
-    public void rotateTo(Vector3d targetPos) {
+    public Vector3d getBarrelDirection() {
+        return new Vector3d(0, 0, 1.0d).rotateYaw((float) nowRotationX);
+    }
 
+    public void setRotationGoal(Vector3d targetPos) {
         Vector3d turretCenter = getBlockCenter();
 
         double a = turretCenter.getX();
@@ -88,8 +89,22 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
         double e = targetPos.getY();
         double f = targetPos.getZ();
         this.rotationState = RotationState.ROTATING;
-        this.targetRotationY = - getAngularDifferenceY(getBarrelInitialTowardTo(), new Vector3d(d - a, 0, f - c));
+        this.goalRotationY = getAngularDifferenceY(getBarrelInitialTowardTo(), new Vector3d(d - a, 0, f - c));
 
+    }
+
+    public void setDirectRotation(Vector3d targetPos) {
+        Vector3d turretCenter = getBlockCenter();
+
+        double a = turretCenter.getX();
+        double b = turretCenter.getY();
+        double c = turretCenter.getZ();
+
+        double d = targetPos.getX();
+        double e = targetPos.getY();
+        double f = targetPos.getZ();
+        this.rotationState = RotationState.ROTATING;
+        this.nowRotationY = getAngularDifferenceY(getBarrelInitialTowardTo(), new Vector3d(d - a, 0, f - c));
     }
 
     public Vector3d getBarrelInitialTowardTo() {
@@ -97,7 +112,9 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
     }
 
     public double getAngularDifferenceY(Vector3d vec1, Vector3d vec2) {
-        return Math.acos((vec1.x * vec2.x + vec1.z * vec2.z) / (Math.sqrt(vec1.x * vec1.x + vec1.z * vec1.z) * Math.sqrt(vec2.x * vec2.x + vec2.z * vec2.z)));
+        double cos = (vec1.x * vec2.x + vec1.z * vec2.z) / (Math.sqrt(vec1.x * vec1.x + vec1.z * vec1.z) * Math.sqrt(vec2.x * vec2.x + vec2.z * vec2.z));
+        double difference = Math.acos(cos);
+        return vec1.x * vec2.z - vec1.z * vec2.x > 0 ? -difference : difference;
     }
 
 
@@ -117,27 +134,27 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
         return this.lastShootTick + this.cd > world.getGameTime();
     }
 
-    public void resetCD(World world) {
-        this.lastShootTick = world.getGameTime();
+    public void resetCD() {
+        assert this.world != null;
+        this.lastShootTick = this.world.getGameTime();
     }
 
-    public void shoot(Vector3d targetPos) {
+    public void shoot() {
         World world = this.getWorld();
         assert world != null;
         if (this.isInCD()) return;
-        resetCD(world);
+        resetCD();
         if (!world.isRemote()) {
-
-            LOGGER.info(String.format("the %s times of shooting", ++shootCount));
-
             Vector3d barrelRootPos = getBarrelEndPos();
             double x0 = barrelRootPos.getX();
             double y0 = barrelRootPos.getY();
             double z0 = barrelRootPos.getZ();
 
-            double x1 = targetPos.getX() - x0;
-            double y1 = targetPos.getY() - y0;
-            double z1 = targetPos.getZ() - z0;
+            Vector3d barrelDirection = this.getBarrelDirection();
+
+            double x1 = barrelDirection.getX();
+            double y1 = barrelDirection.getY();
+            double z1 = barrelDirection.getZ();
 
             RailGunProjectileEntity projectile = new RailGunProjectileEntity(this.world, AbstractStardustProjectileEntity.ProjectileType.KINETIC_HIGHLY_EXPLOSIVE, 1000, 10.0f, this, x0, y0, z0, x1, y1, z1);
             projectile.setRawPosition(x0, y0, z0);
@@ -147,8 +164,8 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
     }
 
     public void resetRotation() {
-        this.targetRotationY = 0;
-        this.targetRotationX = 0;
+        this.goalRotationY = 0;
+        this.goalRotationX = 0;
         this.rotationState = RotationState.ROTATING;
     }
 
@@ -157,13 +174,15 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
     }
 
     private void rotateTick() {
-        if (this.targetRotationY > this.nowRotationY) {
-            if (Math.abs(this.targetRotationY - this.nowRotationY) < this.rotationSpeed) this.nowRotationY = this.targetRotationY;
+        if (this.goalRotationY > this.nowRotationY) {
+            if (Math.abs(this.goalRotationY - this.nowRotationY) < this.rotationSpeed)
+                this.nowRotationY = this.goalRotationY;
             else this.nowRotationY += this.rotationSpeed;
-        } else if (this.targetRotationY < this.nowRotationY) {
-            if (Math.abs(this.targetRotationY - this.nowRotationY) < this.rotationSpeed) this.nowRotationY = this.targetRotationY;
+        } else if (this.goalRotationY < this.nowRotationY) {
+            if (Math.abs(this.goalRotationY - this.nowRotationY) < this.rotationSpeed)
+                this.nowRotationY = this.goalRotationY;
             else this.nowRotationY -= this.rotationSpeed;
-        } else if (this.targetRotationY == this.nowRotationY){
+        } else if (this.goalRotationY == this.nowRotationY) {
             this.rotationState = RotationState.READY;
         }
 //        this.nowRotationY = this.targetRotationY;
@@ -172,29 +191,29 @@ public class RailGun4MediumTileEntity extends TileEntity implements IAnimatable,
 
     @Override
     public void tick() {
-//        if (this.rotationState == RotationState.FREE) {
-//            World world = this.world;
-//            assert world != null;
-//            LivingEntity entity = world.getClosestEntity(VillagerEntity.class, EntityPredicate.DEFAULT, null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getRenderBoundingBox().grow(64d, 20d, 64d));
-//            if (entity != null) {
-//                this.targetPos = entity.getPositionVec();
-//                rotateTo(this.targetPos);
-//            } else resetRotation();
-//        } else if (this.rotationState == RotationState.READY) {
-//            if (this.targetPos == null) {
-//                this.rotationState = RotationState.FREE;
-//                return;
-//            }
-//            shoot(this.targetPos);
-//        } else if (this.rotationState == RotationState.ROTATING) {
-//            rotateTick();
-//        }
-//        if (controller.getAnimationState() == AnimationState.Stopped) {
-//            controller.setAnimation(new AnimationBuilder().addAnimation("railgun4_shooting", true));
+        if (this.rotationState == RotationState.FREE) {
+            World world = this.world;
+            assert world != null;
+            LivingEntity entity = world.getClosestEntity(VillagerEntity.class, EntityPredicate.DEFAULT, null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getRenderBoundingBox().grow(64d, 20d, 64d));
+            if (entity != null) {
+                setRotationGoal(entity.getPositionVec());
+            } else resetRotation();
+        } else if (this.rotationState == RotationState.READY) {
+            shoot();
+        } else if (this.rotationState == RotationState.ROTATING) {
+            rotateTick();
+        }
+////        if (controller.getAnimationState() == AnimationState.Stopped) {
+////            controller.setAnimation(new AnimationBuilder().addAnimation("railgun4_shooting", true));
+////        }
+//        assert this.world != null;
+//        LivingEntity entity = this.world.getClosestEntity(VillagerEntity.class, EntityPredicate.DEFAULT, null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getRenderBoundingBox().grow(64d, 20d, 64d));
+//        if (entity != null) {
+//            setDirectRotation(entity.getPositionVec());
+//        } else {
+//            this.setRotationY(0);
 //        }
     }
-
-
 
 
     @Override
