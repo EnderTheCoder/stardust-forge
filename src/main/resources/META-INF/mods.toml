@@ -56,3 +56,8 @@ mandatory = true
 versionRange = "[1.16.5,1.17)"
 ordering = "NONE"
 side = "BOTH"
+[[dependencies.stardust]]
+modId = "geckolib3"
+versionRange = "[3.0.0,)"
+side = "CLIENT"
+mandatory = true

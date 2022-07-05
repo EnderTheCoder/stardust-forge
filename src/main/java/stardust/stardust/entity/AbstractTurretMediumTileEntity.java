@@ -44,6 +44,7 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
     public double goalRotationX = 0;
     public double goalRotationY = 0;
     private final Vector3d barrelRootOffset = new Vector3d(0.0d, 0.2d, 4.0d);
+    public PlayerEntity playerHooked;
     public static HashMap<PlayerEntity, AbstractTurretMediumTileEntity> TURRETS_ON_PLAYER_CONTROLLED = new HashMap<>();
 
     public AbstractTurretMediumTileEntity() {
@@ -62,11 +63,11 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
     }
 
     public double getActualRotationY() {
-        return nowRotationY + initialRotationYPrefix;
+        return playerHooked == null ? nowRotationY + initialRotationYPrefix : nowRotationY;
     }
 
     public double getActualRotationX() {
-        return nowRotationX + initialRotationXPrefix;
+        return playerHooked == null ? nowRotationX + initialRotationXPrefix : nowRotationX;
     }
 
 
@@ -90,7 +91,11 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
         double f = targetPos.getZ();
         this.rotationState = RotationState.ROTATING;
         this.goalRotationY = getAngularDifferenceY(getBarrelInitialTowardTo(), new Vector3d(d - a, 0, f - c));
+    }
 
+    public void setRotationGoal(double yaw) {
+        this.goalRotationY = yaw;
+        this.rotationState = RotationState.ROTATING;
     }
 
     public void setDirectRotation(Vector3d targetPos) {
@@ -160,7 +165,6 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
             projectile.setRawPosition(x0, y0, z0);
             world.addEntity(projectile);
         }
-        this.rotationState = RotationState.FREE;
     }
 
     public void resetRotation() {
@@ -173,6 +177,22 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
         return new Vector3d(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
     }
 
+
+    public void hookPlayer(PlayerEntity player) {
+        this.playerHooked = player;
+        TURRETS_ON_PLAYER_CONTROLLED.put(player, this);
+        player.setRotationYawHead((float) this.getActualRotationY());
+    }
+
+    public PlayerEntity getPlayerHooked() {
+        return this.playerHooked;
+    }
+
+    public void unhookPlayer() {
+        TURRETS_ON_PLAYER_CONTROLLED.put(this.playerHooked, null);
+        this.playerHooked = null;
+    }
+
     private void rotateTick() {
         if (this.goalRotationY > this.nowRotationY) {
             if (Math.abs(this.goalRotationY - this.nowRotationY) < this.rotationSpeed)
@@ -183,36 +203,27 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
                 this.nowRotationY = this.goalRotationY;
             else this.nowRotationY -= this.rotationSpeed;
         } else if (this.goalRotationY == this.nowRotationY) {
-            this.rotationState = RotationState.READY;
+            this.rotationState = RotationState.FREE;
         }
 //        this.nowRotationY = this.targetRotationY;
 //        this.rotationState = RotationState.COMPLETED;
     }
 
+
     @Override
     public void tick() {
+
+        if (this.playerHooked != null) {
+            setRotationGoal(-Math.toRadians(this.playerHooked.getRotationYawHead()));
+        }
         if (this.rotationState == RotationState.FREE) {
-            World world = this.world;
-            assert world != null;
-            LivingEntity entity = world.getClosestEntity(VillagerEntity.class, EntityPredicate.DEFAULT, null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getRenderBoundingBox().grow(64d, 20d, 64d));
-            if (entity != null) {
-                setRotationGoal(entity.getPositionVec());
-            } else resetRotation();
+            resetRotation();
         } else if (this.rotationState == RotationState.READY) {
-            shoot();
+//            shoot();
         } else if (this.rotationState == RotationState.ROTATING) {
             rotateTick();
         }
-////        if (controller.getAnimationState() == AnimationState.Stopped) {
-////            controller.setAnimation(new AnimationBuilder().addAnimation("railgun4_shooting", true));
-////        }
-//        assert this.world != null;
-//        LivingEntity entity = this.world.getClosestEntity(VillagerEntity.class, EntityPredicate.DEFAULT, null, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getRenderBoundingBox().grow(64d, 20d, 64d));
-//        if (entity != null) {
-//            setDirectRotation(entity.getPositionVec());
-//        } else {
-//            this.setRotationY(0);
-//        }
+
     }
 
 
