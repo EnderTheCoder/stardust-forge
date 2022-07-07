@@ -31,7 +31,7 @@ displayName = "Stardust" #mandatory
 # A text field displayed in the mod UI
 #credits="Thanks for this example mod goes to Java" #optional
 # A text field displayed in the mod UI
-authors = "EnderTheCoder" #optional
+authors = ["EnderTheCoder", "Yellow_Keven", "koap", "XingChui", "becausekill"] #optional
 # The description text for the mod (multi line!) (#mandatory)
 description = '''
 A space style starship mod.
@@ -56,3 +56,8 @@ mandatory = true
 versionRange = "[1.16.5,1.17)"
 ordering = "NONE"
 side = "BOTH"
+[[dependencies.stardust]]
+modId = "geckolib3"
+versionRange = "[3.0.0,)"
+side = "CLIENT"
+mandatory = true
