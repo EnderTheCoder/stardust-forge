@@ -34,10 +34,10 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
     private RotationState rotationState = RotationState.FREE;
     public double initialRotationYPrefix = Math.PI;
     public double initialRotationXPrefix = 0;
-    private int cd = 60;
+    private int cd = 20;
     private long lastShootTick = 0;
     private int shootCount = 0;
-    private final int rotationSpeed = 1;
+    private final double rotationSpeed = Math.PI / (3 * 20);
     public double nowRotationX = 0;
     public double nowRotationY = 0;
     //    public Vector3d targetPos;
@@ -76,7 +76,7 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
     }
 
     public Vector3d getBarrelDirection() {
-        return new Vector3d(0, 0, 1.0d).rotateYaw((float) nowRotationX);
+        return new Vector3d(0, 0, 1.0d).rotateYaw((float) getActualRotationY());
     }
 
     public void setRotationGoal(Vector3d targetPos) {
@@ -165,10 +165,10 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
             projectile.setRawPosition(x0, y0, z0);
             world.addEntity(projectile);
         }
-        this.rotationState = RotationState.FREE;
     }
 
     public void resetRotation() {
+        if (this.goalRotationY == 0 && this.goalRotationX == 0) return;
         this.goalRotationY = 0;
         this.goalRotationX = 0;
         this.rotationState = RotationState.ROTATING;
@@ -216,6 +216,8 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
 
         if (this.playerHooked != null) {
             setRotationGoal(-Math.toRadians(this.playerHooked.getRotationYawHead()));
+        } else {
+            resetRotation();
         }
 //        goalRotationY = Math.PI;
 

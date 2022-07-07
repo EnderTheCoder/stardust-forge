@@ -15,7 +15,7 @@ public class TurretCamera {
         AbstractTurretMediumTileEntity turret = AbstractTurretMediumTileEntity.TURRETS_ON_PLAYER_CONTROLLED.get(player);
         if (turret != null) {
 //            event.getInfo().setPosition(turret.getBarrelEndPos());
-//            event.getInfo().setPosition(turret.getBlockCenter().add(0,1.5,0));
+            event.getInfo().setPosition(turret.getBlockCenter().add(0,1.5,0));
         }
     }
 }
