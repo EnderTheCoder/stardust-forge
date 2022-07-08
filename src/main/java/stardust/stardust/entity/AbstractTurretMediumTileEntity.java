@@ -1,9 +1,6 @@
 package stardust.stardust.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -34,9 +31,9 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
     private RotationState rotationState = RotationState.FREE;
     public double initialRotationYPrefix = Math.PI;
     public double initialRotationXPrefix = 0;
-    private int cd = 20;
+    private final int cd = 5;
     private long lastShootTick = 0;
-    private int shootCount = 0;
+//    private int shootCount = 0;
     private final double rotationSpeed = Math.PI / (3 * 20);
     public double nowRotationX = 0;
     public double nowRotationY = 0;
@@ -189,7 +186,7 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
         return this.playerHooked;
     }
 
-    public void unhookPlayer() {
+    public void releasePlayer() {
         TURRETS_ON_PLAYER_CONTROLLED.put(this.playerHooked, null);
         this.playerHooked = null;
     }

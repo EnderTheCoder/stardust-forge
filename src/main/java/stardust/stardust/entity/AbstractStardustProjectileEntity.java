@@ -1,3 +1,8 @@
+/**
+ * @Author: EnderTheCoder
+ *
+ * */
+
 package stardust.stardust.entity;
 
 import net.minecraft.entity.EntityType;
@@ -80,10 +85,9 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
         }
     }
 
-    /*
-     *
+    /**
      * OnBlockHit()
-     * */
+     */
     @Override
     protected void func_230299_a_(BlockRayTraceResult result) {
         super.func_230299_a_(result);
