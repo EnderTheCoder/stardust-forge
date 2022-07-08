@@ -1,4 +1,6 @@
 {
-  "message.stardust.debug": "debug",
-  "message.stardust.counter": "计数: %d"
+  "message.stardust.debug": "调试",
+  "message.stardust.release": "你已经离开炮塔",
+  "key.stardust": "万星归尘",
+  "key.stardust.release": "离开炮塔"
 }

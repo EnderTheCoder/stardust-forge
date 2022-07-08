@@ -1,4 +1,6 @@
 {
   "message.stardust.debug": "debug",
-  "message.stardust.counter": "count: %d"
+  "message.stardust.release": "You have left the turret",
+  "key.stardust": "Stardust",
+  "key.stardust.release": "Leave turret"
 }

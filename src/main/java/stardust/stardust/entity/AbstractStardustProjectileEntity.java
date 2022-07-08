@@ -81,8 +81,6 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
     protected void onEntityHit(@Nonnull EntityRayTraceResult result) {
         super.onEntityHit(result);
         if (!this.world.isRemote()) {
-            Stardust.LOGGER.info("Entity HIT");
-            Stardust.LOGGER.info(result.getEntity().getName());
             if (this.projectileType == ProjectileType.KINETIC_HIGHLY_EXPLOSIVE) this.remove();
         }
     }
@@ -94,8 +92,6 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
     protected void func_230299_a_(@Nonnull BlockRayTraceResult result) {
         super.func_230299_a_(result);
         if (!this.world.isRemote) {
-            Stardust.LOGGER.info("Block HIT");
-            Stardust.LOGGER.info(this.world.getBlockState(result.getPos()));
             if (this.projectileType == ProjectileType.ENERGY_SUBSTANCE_DECOMPOSER) {
                 new SubstanceDecomposing(this.world, result.getPos(), (long) this.attribute);
             }
