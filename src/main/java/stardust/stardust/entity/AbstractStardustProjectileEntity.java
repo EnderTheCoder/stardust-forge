@@ -21,6 +21,8 @@ import software.bernie.geckolib3.core.IAnimatable;
 import stardust.stardust.Stardust;
 import stardust.stardust.damage.SubstanceDecomposing;
 
+import javax.annotation.Nonnull;
+
 public abstract class AbstractStardustProjectileEntity extends DamagingProjectileEntity {
 
     enum ProjectileType {
@@ -76,7 +78,7 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
     }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult result) {
+    protected void onEntityHit(@Nonnull EntityRayTraceResult result) {
         super.onEntityHit(result);
         if (!this.world.isRemote()) {
             Stardust.LOGGER.info("Entity HIT");
@@ -89,7 +91,7 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
      * OnBlockHit()
      */
     @Override
-    protected void func_230299_a_(BlockRayTraceResult result) {
+    protected void func_230299_a_(@Nonnull BlockRayTraceResult result) {
         super.func_230299_a_(result);
         if (!this.world.isRemote) {
             Stardust.LOGGER.info("Block HIT");
@@ -144,8 +146,9 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
         compound.putString("projectileType", String.valueOf(this.projectileType));
     }
 
+
     @Override
-    public IPacket<?> createSpawnPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    public @Nonnull IPacket<?> createSpawnPacket() {
+         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }
