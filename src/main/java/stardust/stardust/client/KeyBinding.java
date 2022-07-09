@@ -8,6 +8,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class KeyBinding {
+
+    /**
+     * Register key bindings on client side.
+     * */
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event) {
         ClientRegistry.registerKeyBinding(TurretCamera.RELEASE_KEY);

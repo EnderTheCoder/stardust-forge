@@ -22,12 +22,15 @@ public class TurretCamera {
 
     public static final KeyBinding RELEASE_KEY = new KeyBinding("key.stardust",
             KeyConflictContext.IN_GAME,
-            KeyModifier.CONTROL,
+            KeyModifier.NONE,
             InputMappings.Type.KEYSYM,
             GLFW.GLFW_KEY_LEFT_SHIFT,
             "key.stardust.release");
 
 
+    /**
+     * Change the player's camera position to the turret's position
+     * */
     @SubscribeEvent
     public static void onCameraSetup(EntityViewRenderEvent event) {
         PlayerEntity player = (PlayerEntity) event.getInfo().getRenderViewEntity();
@@ -38,6 +41,9 @@ public class TurretCamera {
         }
     }
 
+    /**
+    * Listen to player's left click to shoot. Meanwhile, cancel this event in case of player destroy things around his real position.
+    * */
     @SubscribeEvent
     public static void onPlayerShoot(InputEvent.ClickInputEvent event) {
         AbstractTurretMediumTileEntity turret = AbstractTurretMediumTileEntity.TURRETS_ON_PLAYER_CONTROLLED.get(Minecraft.getInstance().player);
