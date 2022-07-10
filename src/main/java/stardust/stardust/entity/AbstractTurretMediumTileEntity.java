@@ -1,11 +1,17 @@
 package stardust.stardust.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -15,8 +21,11 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import stardust.stardust.Stardust;
 import stardust.stardust.registry.TileEntityTypeRegistry;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 
 public class AbstractTurretMediumTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity {
@@ -31,16 +40,16 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
     private RotationState rotationState = RotationState.FREE;
     public double initialRotationYPrefix = Math.PI;
     public double initialRotationXPrefix = 0;
-    private final int cd = 5;
+    private int cd = 5;
     private long lastShootTick = 0;
-//    private int shootCount = 0;
-    private final double rotationSpeed = Math.PI / (3 * 20);
+    //    private int shootCount = 0;
+    private double rotationSpeed = Math.PI / (3 * 20);
     public double nowRotationX = 0;
     public double nowRotationY = 0;
     //    public Vector3d targetPos;
     public double goalRotationX = 0;
     public double goalRotationY = 0;
-    private final Vector3d barrelRootOffset = new Vector3d(0.0d, 0.2d, 4.0d);
+    private Vector3d barrelRootOffset = new Vector3d(0.0d, 0.2d, 4.0d);
     public PlayerEntity playerHooked;
     public static HashMap<PlayerEntity, AbstractTurretMediumTileEntity> TURRETS_ON_PLAYER_CONTROLLED = new HashMap<>();
 
@@ -189,6 +198,7 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
     public void releasePlayer() {
         TURRETS_ON_PLAYER_CONTROLLED.put(this.playerHooked, null);
         this.playerHooked = null;
+        Stardust.LOGGER.info("release");
     }
 
     private void rotateTick() {
@@ -208,23 +218,82 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
     }
 
 
+    /**
+     * Packet sending for Server -> Client
+     */
+    @Nullable
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return null;
+    }
+
+    /**
+     * Packet receiver for Client.
+     */
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        handleUpdateTag(pkt.getNbtCompound());
+    }
+
+    /**
+     * Write data into NBT object.
+     */
+    @Override
+    public @Nonnull CompoundNBT getUpdateTag() {
+        CompoundNBT compoundNBT = super.getUpdateTag();
+        compoundNBT.putString("rotationState", this.rotationState.toString());
+        compoundNBT.putDouble("initialRotationXPrefix", this.initialRotationXPrefix);
+        compoundNBT.putDouble("initialRotationYPrefix", this.initialRotationYPrefix);
+        compoundNBT.putInt("cd", this.cd);
+        compoundNBT.putLong("lastShootTick", this.lastShootTick);
+        compoundNBT.putDouble("rotationSpeed", this.rotationSpeed);
+        compoundNBT.putDouble("nowRotationX", this.nowRotationX);
+        compoundNBT.putDouble("nowRotationY", this.nowRotationY);
+        compoundNBT.putDouble("goalRotationX", this.goalRotationX);
+        compoundNBT.putDouble("goalRotationY", this.goalRotationY);
+        compoundNBT.putDouble("barrelRootOffsetX", this.barrelRootOffset.x);
+        compoundNBT.putDouble("barrelRootOffsetY", this.barrelRootOffset.y);
+        compoundNBT.putDouble("barrelRootOffsetZ", this.barrelRootOffset.z);
+        if (this.playerHooked != null)
+            compoundNBT.putUniqueId("playerHooked", this.playerHooked.getUniqueID());
+        return compoundNBT;
+    }
+
+    /**
+     * Read data from NBT object.
+     */
+    public void handleUpdateTag(CompoundNBT compoundNBT) {
+        this.rotationState = RotationState.valueOf(compoundNBT.getString("rotationState"));
+        this.initialRotationXPrefix = compoundNBT.getDouble("initialRotationXPrefix");
+        this.initialRotationYPrefix = compoundNBT.getDouble("initialRotationYPrefix");
+        this.cd = compoundNBT.getInt("cd");
+        this.lastShootTick = compoundNBT.getLong("lastShootTick");
+        this.rotationSpeed = compoundNBT.getDouble("rotationSpeed");
+        this.nowRotationX = compoundNBT.getDouble("nowRotationX");
+        this.nowRotationY = compoundNBT.getDouble("nowRotationY");
+        this.goalRotationX = compoundNBT.getDouble("goalRotationX");
+        this.nowRotationY = compoundNBT.getDouble("goalRotationY");
+        this.barrelRootOffset = new Vector3d(compoundNBT.getDouble("barrelRootOffsetX"), compoundNBT.getDouble("barrelRootOffsetY"), compoundNBT.getDouble("barrelRootOffsetZ"));
+        this.playerHooked = this.world.getPlayerByUuid(compoundNBT.getUniqueId("playerHooked"));
+    }
+
+
     @Override
     public void tick() {
-
         if (this.playerHooked != null) {
             setRotationGoal(-Math.toRadians(this.playerHooked.getRotationYawHead()));
-        } else {
-            resetRotation();
         }
 //        goalRotationY = Math.PI;
 
         if (this.rotationState == RotationState.FREE) {
-
 //            resetRotation();
         } else if (this.rotationState == RotationState.READY) {
             shoot();
         } else if (this.rotationState == RotationState.ROTATING) {
             rotateTick();
+        }
+
+        if (!this.world.isRemote) {
+            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
         }
 
     }
