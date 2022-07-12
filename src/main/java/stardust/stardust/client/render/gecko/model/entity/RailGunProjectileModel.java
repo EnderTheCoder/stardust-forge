@@ -3,13 +3,9 @@ package stardust.stardust.client.render.gecko.model.entity;// Made with Blockben
 // Paste this class into your mod and generate all required imports
 
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-import stardust.stardust.entity.RailGunProjectileEntity;
+import stardust.stardust.entity.projectile.RailGunProjectileEntity;
 
 import static stardust.stardust.Stardust.MODID;
 

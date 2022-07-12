@@ -8,7 +8,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import stardust.stardust.entity.CarrierDemoEntity;
-import stardust.stardust.entity.RailGunProjectileEntity;
+import stardust.stardust.entity.projectile.HEProjectileEntity;
+import stardust.stardust.entity.projectile.RailGunProjectileEntity;
 
 import static stardust.stardust.Stardust.MODID;
 

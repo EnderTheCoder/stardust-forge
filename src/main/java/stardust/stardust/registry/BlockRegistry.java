@@ -6,6 +6,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import stardust.stardust.block.*;
+import stardust.stardust.block.cannon.medium.CannonBaseMedium;
+import stardust.stardust.block.cannon.medium.RailGun4Medium;
 
 import static stardust.stardust.Stardust.MODID;
 

@@ -1,4 +1,4 @@
-package stardust.stardust.block;
+package stardust.stardust.block.cannon;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;

@@ -1,4 +1,4 @@
-package stardust.stardust.entity;
+package stardust.stardust.entity.projectile;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -6,7 +6,6 @@ import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import stardust.stardust.registry.EntityTypeRegistry;
 
 public class ProjectileDemoEntity extends AbstractStardustProjectileEntity implements IAnimatable {
 

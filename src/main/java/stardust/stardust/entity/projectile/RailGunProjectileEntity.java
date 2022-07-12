@@ -1,22 +1,11 @@
-package stardust.stardust.entity;
+package stardust.stardust.entity.projectile;
 
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.network.IPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import stardust.stardust.damage.SubstanceDecomposing;
 import stardust.stardust.registry.EntityTypeRegistry;
 
 public class RailGunProjectileEntity extends AbstractStardustProjectileEntity implements IAnimatable, net.minecraftforge.common.extensions.IForgeEntity{

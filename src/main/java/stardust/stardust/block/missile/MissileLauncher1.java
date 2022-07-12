@@ -1,4 +1,4 @@
-package stardust.stardust.block;
+package stardust.stardust.block.missile;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;

@@ -1,12 +1,10 @@
 package stardust.stardust.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.vector.Vector3d;
@@ -22,16 +20,18 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import stardust.stardust.Stardust;
+import stardust.stardust.entity.projectile.AbstractStardustProjectileEntity;
+import stardust.stardust.entity.projectile.RailGunProjectileEntity;
 import stardust.stardust.registry.TileEntityTypeRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 
-public class AbstractTurretMediumTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity {
+public class AbstractCannonMediumTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity {
     public static final Logger LOGGER = LogManager.getLogger();
     private final AnimationFactory factory = new AnimationFactory(this);
-    private final AnimationController<AbstractTurretMediumTileEntity> controller = new AnimationController<>(this, "controller", 0, this::predicate);
+    private final AnimationController<AbstractCannonMediumTileEntity> controller = new AnimationController<>(this, "controller", 0, this::predicate);
 
     public enum RotationState {
         ROTATING, READY, FREE, RESETTING
@@ -51,9 +51,9 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
     public double goalRotationY = 0;
     private Vector3d barrelRootOffset = new Vector3d(0.0d, 0.2d, 4.0d);
     public PlayerEntity playerHooked;
-    public static HashMap<PlayerEntity, AbstractTurretMediumTileEntity> TURRETS_ON_PLAYER_CONTROLLED = new HashMap<>();
+    public static HashMap<PlayerEntity, AbstractCannonMediumTileEntity> TURRETS_ON_PLAYER_CONTROLLED = new HashMap<>();
 
-    public AbstractTurretMediumTileEntity() {
+    public AbstractCannonMediumTileEntity() {
         super(TileEntityTypeRegistry.RAIL_GUN_4_MEDIUM_TILE_ENTITY.get());
     }
 
@@ -167,9 +167,9 @@ public class AbstractTurretMediumTileEntity extends TileEntity implements IAnima
             double y1 = barrelDirection.getY();
             double z1 = barrelDirection.getZ();
 
-            RailGunProjectileEntity projectile = new RailGunProjectileEntity(this.world, AbstractStardustProjectileEntity.ProjectileType.KINETIC_HIGHLY_EXPLOSIVE, 1000, 10.0f, this, x0, y0, z0, x1, y1, z1);
-            projectile.setRawPosition(x0, y0, z0);
-            world.addEntity(projectile);
+//            RailGunProjectileEntity projectile = new RailGunProjectileEntity(this.world, AbstractStardustProjectileEntity.ProjectileType.KINETIC_HIGHLY_EXPLOSIVE, 1000, 10.0f, this, x0, y0, z0, x1, y1, z1);
+//            projectile.setRawPosition(x0, y0, z0);
+//            world.addEntity(projectile);
         }
     }
 

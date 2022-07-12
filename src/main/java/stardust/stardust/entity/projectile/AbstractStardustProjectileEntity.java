@@ -3,7 +3,7 @@
  *
  * */
 
-package stardust.stardust.entity;
+package stardust.stardust.entity.projectile;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
@@ -17,8 +17,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
-import software.bernie.geckolib3.core.IAnimatable;
-import stardust.stardust.Stardust;
 import stardust.stardust.damage.SubstanceDecomposing;
 
 import javax.annotation.Nonnull;

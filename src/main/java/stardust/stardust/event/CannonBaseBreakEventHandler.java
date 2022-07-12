@@ -2,12 +2,9 @@ package stardust.stardust.event;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import stardust.stardust.block.CannonBaseMedium;
+import stardust.stardust.block.cannon.medium.CannonBaseMedium;
 
 import java.util.List;
 
