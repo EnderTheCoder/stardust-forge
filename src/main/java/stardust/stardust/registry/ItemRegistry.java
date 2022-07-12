@@ -6,7 +6,6 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import stardust.stardust.block.RailGun4Medium;
 import stardust.stardust.item.CannonBaseMedium;
 import stardust.stardust.item.group.ModGroup;
 
