@@ -21,6 +21,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import stardust.stardust.Stardust;
 import stardust.stardust.entity.projectile.AbstractStardustProjectileEntity;
+import stardust.stardust.entity.projectile.HEProjectileEntity;
 import stardust.stardust.entity.projectile.RailGunProjectileEntity;
 import stardust.stardust.registry.TileEntityTypeRegistry;
 
@@ -167,9 +168,10 @@ public class AbstractCannonMediumTileEntity extends TileEntity implements IAnima
             double y1 = barrelDirection.getY();
             double z1 = barrelDirection.getZ();
 
-//            RailGunProjectileEntity projectile = new RailGunProjectileEntity(this.world, AbstractStardustProjectileEntity.ProjectileType.KINETIC_HIGHLY_EXPLOSIVE, 1000, 10.0f, this, x0, y0, z0, x1, y1, z1);
-//            projectile.setRawPosition(x0, y0, z0);
-//            world.addEntity(projectile);
+//            RailGunProjectileEntity projectile = new HEProjectileEntity(this.world, 1000, 10.0f, this, x0, y0, z0, x1, y1, z1);
+            RailGunProjectileEntity projectile = new HEProjectileEntity(, this.world);
+            projectile.setRawPosition(x0, y0, z0);
+            world.addEntity(projectile);
         }
     }
 

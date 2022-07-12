@@ -8,11 +8,18 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class HEProjectileEntity extends AbstractStardustProjectileEntity implements IAnimatable {
 
-    public ProjectileType projectileType = ProjectileType.KINETIC_HIGHLY_EXPLOSIVE;
+    private final AnimationFactory factory = new AnimationFactory(this);
 
     public HEProjectileEntity(EntityType<? extends AbstractStardustProjectileEntity> entityTypeIn, World worldIn) {
         super(entityTypeIn, worldIn);
+        this.projectileType = ProjectileType.KINETIC_HIGHLY_EXPLOSIVE;
     }
+
+    public HEProjectileEntity(World worldIn, ProjectileType projectileType, ) {
+        super(EntityTypeRegistry.HE_PROJECTILE_ENTITY.get(), worldIn, )
+    }
+
+
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -21,6 +28,6 @@ public class HEProjectileEntity extends AbstractStardustProjectileEntity impleme
 
     @Override
     public AnimationFactory getFactory() {
-        return null;
+        return factory;
     }
 }

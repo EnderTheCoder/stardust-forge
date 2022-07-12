@@ -8,7 +8,7 @@ import stardust.stardust.entity.projectile.HEProjectileEntity;
 import stardust.stardust.entity.projectile.RailGunProjectileEntity;
 
 public class HEProjectileRenderer extends GeoProjectilesRenderer<HEProjectileEntity> {
-    public HEProjectileRenderer(EntityRendererManager renderManager, AnimatedGeoModel<RailGunProjectileEntity> modelProvider) {
+    public HEProjectileRenderer(EntityRendererManager renderManager) {
         super(renderManager, new HEProjectileModel());
     }
 

@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import stardust.stardust.client.render.gecko.renderer.block.RailGun4MediumRenderer;
 import stardust.stardust.client.render.gecko.renderer.entity.CarrierDemoRenderer;
+import stardust.stardust.client.render.gecko.renderer.entity.HEProjectileRenderer;
 import stardust.stardust.client.render.gecko.renderer.entity.RailGunProjectileRenderer;
 import stardust.stardust.registry.EntityTypeRegistry;
 import stardust.stardust.registry.TileEntityTypeRegistry;
@@ -20,6 +21,7 @@ public class RenderTypeRegistry {
         ClientRegistry.bindTileEntityRenderer(TileEntityTypeRegistry.RAIL_GUN_4_MEDIUM_TILE_ENTITY.get(), RailGun4MediumRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTypeRegistry.RAIL_GUN_PROJECTILE_ENTITY.get(), RailGunProjectileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityTypeRegistry.HE_PROJECTILE_ENTITY.get(), HEProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityTypeRegistry.CARRIER_DEMO_ENTITY.get(), CarrierDemoRenderer::new);
     }
 }

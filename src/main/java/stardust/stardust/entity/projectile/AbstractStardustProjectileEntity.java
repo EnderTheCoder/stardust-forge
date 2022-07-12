@@ -123,7 +123,7 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
         this.energy = compound.getLong("energy");
         this.shooterPos = new BlockPos(compound.getInt("shootPosX"), compound.getInt("shootPosY"), compound.getInt("shootPosZ"));
         this.attribute = compound.getFloat("attribute");
-        this.projectileType = ProjectileType.valueOf(compound.getString("projectileType"));
+//        this.projectileType = ProjectileType.valueOf(compound.getString("projectileType"));
     }
 
     @Override
@@ -137,7 +137,7 @@ public abstract class AbstractStardustProjectileEntity extends DamagingProjectil
         compound.putInt("shooterPosY", this.shooterPos.getY());
         compound.putInt("shooterPosZ", this.shooterPos.getZ());
         compound.putFloat("attribute", this.attribute);
-        compound.putString("projectileType", String.valueOf(this.projectileType));
+//        compound.putString("projectileType", String.valueOf(this.projectileType));
     }
 
 
